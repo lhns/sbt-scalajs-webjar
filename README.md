@@ -1,0 +1,1 @@
+# sbt-scalajs-webjar
