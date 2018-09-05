@@ -1,11 +1,12 @@
 package de.lolhens.scalajs.webjar
 
-import de.lolhens.scalajs.webjar.WebjarPlugin.autoImport._
+import de.lolhens.scalajs.webjar.WebJarPlugin.autoImport._
+import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport._
 import sbt.Keys._
 import sbt._
 
-object ScalaJSWebjarPlugin extends AutoPlugin {
+object ScalaJSWebJarPlugin extends AutoPlugin {
 
   object autoImport {
     lazy val isDevMode = taskKey[Boolean]("Whether the app runs in development mode")
@@ -14,7 +15,7 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
 
   import autoImport._
 
-  override def requires: Plugins = WebjarPlugin
+  override def requires: Plugins = ScalaJSPlugin && WebJarPlugin
 
   override lazy val projectSettings = Seq(
     scalaJSUseMainModuleInitializer := true,
@@ -50,7 +51,7 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
         fullOptJS / scalaJS
     }.value,
 
-    packageWebjar / mappings := (fastOptJS / scalaJS).value.map { file =>
+    packageWebJar / mappings := scalaJS.value.map { file =>
       file -> s"js/${file.name}"
     }
   )
