@@ -1,54 +1,57 @@
 package de.lolhens.scalajs.webjar
 
+import sbt.Defaults.ConfigZero
 import sbt.Keys._
 import sbt._
 
 import scala.language.implicitConversions
 
-object WebjarPlugin extends AutoPlugin {
+object WebJarPlugin extends AutoPlugin {
 
   object autoImport {
-    lazy val Webjar = config("webjar")
-    lazy val packageWebjar = taskKey[File]("Produces a webjar.")
+    lazy val WebJar = config("webjar")
+    lazy val packageWebJar = taskKey[File]("Produces a WebJar.")
 
-    implicit def webjarProject(project: Project): WebjarProject = WebjarProject.webjarProject(project)
+    implicit def webJarProject(project: Project): WebJarProject = WebJarProject.webJarProject(project)
   }
 
   import autoImport._
 
   override def projectConfigurations: Seq[Configuration] = Seq(
-    Webjar
+    WebJar
   )
 
   override lazy val projectSettings: Seq[Def.Setting[_]] =
-    Defaults.packageTaskSettings(Webjar / packageWebjar, Def.task {
-      def webjarMappings = (packageWebjar / mappings).value
+    inConfig(WebJar) {
+      Defaults.packageTaskSettings(packageWebJar, Def.task {
+        def webjarMappings = (ConfigZero / packageWebJar / mappings).value
 
-      def artifactName = name.value
+        def artifactName = name.value
 
-      def artifactVersion = version.value
+        def artifactVersion = version.value
 
-      webjarMappings.map {
-        case (file, mapping) =>
-          file -> s"META-INF/resources/webjars/$artifactName/$artifactVersion/$mapping"
-      }
-    }) ++ Seq[Def.Setting[_]](
-      packageWebjar / mappings := Seq.empty,
+        webjarMappings.map {
+          case (file, mapping) =>
+            file -> s"META-INF/resources/webjars/$artifactName/$artifactVersion/$mapping"
+        }
+      }) ++ Seq(
+        packageWebJar / artifact := {
+          val artifactValue = (packageWebJar / artifact).value
+          artifactValue.withName(artifactValue.name + "-webjar")
+        },
 
-      packageWebjar / artifact := {
-        val artifactValue = (packageWebjar / artifact).value
-        artifactValue.withName(artifactValue.name + "-webjar")
-      },
+        exportedProductJars := {
+          val data = packageWebJar.value
+          val attributed = Attributed.blank(data)
+            .put(artifact.key, (packageWebJar / artifact).value)
+            .put(configuration.key, WebJar)
 
-      Webjar / exportedProductJars := {
-        val data = (Webjar / packageWebjar).value
-        val attributed = Attributed.blank(data)
-          .put(artifact.key, (packageWebjar / artifact).value)
-          .put(configuration.key, Webjar)
+          Seq(attributed)
+        },
 
-        Seq(attributed)
-      },
-
-      Webjar / exportJars := true
+        exportJars := true
+      )
+    } ++ Seq(
+      packageWebJar / mappings := Seq.empty,
     )
 }

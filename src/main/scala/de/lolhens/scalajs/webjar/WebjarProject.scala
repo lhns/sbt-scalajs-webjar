@@ -1,14 +1,14 @@
 package de.lolhens.scalajs.webjar
 
-import de.lolhens.scalajs.webjar.WebjarPlugin.autoImport._
+import de.lolhens.scalajs.webjar.WebJarPlugin.autoImport._
 import sbt._
 
 import scala.language.implicitConversions
 
-class WebjarProject(val self: Project) extends AnyVal {
-  def webjar: ClasspathDep[ProjectReference] = self % s"${Compile.name}->${Webjar.name}"
+class WebJarProject(val self: Project) extends AnyVal {
+  def webJar: ClasspathDep[ProjectReference] = self % s"${Compile.name}->${WebJar.name}"
 }
 
-object WebjarProject {
-  implicit def webjarProject(project: Project): WebjarProject = new WebjarProject(project)
+object WebJarProject {
+  implicit def webJarProject(project: Project): WebJarProject = new WebJarProject(project)
 }
