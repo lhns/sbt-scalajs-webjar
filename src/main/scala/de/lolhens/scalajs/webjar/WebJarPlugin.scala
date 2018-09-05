@@ -47,11 +47,6 @@ object WebJarPlugin extends AutoPlugin {
         exportJars := true
       )
     } ++ Seq(
-      packageWebJar / mappings := Seq.empty,
-
-      packageWebJar / artifact := {
-        val artifactValue = (packageWebJar / artifact).value
-        artifactValue.withName(artifactValue.name + "-webjar")
-      }
+      packageWebJar / mappings := Seq.empty
     )
 }
