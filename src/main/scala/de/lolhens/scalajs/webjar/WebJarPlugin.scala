@@ -35,11 +35,6 @@ object WebJarPlugin extends AutoPlugin {
             file -> s"META-INF/resources/webjars/$artifactName/$artifactVersion/$mapping"
         }
       }) ++ Seq(
-        packageWebJar / artifact := {
-          val artifactValue = (packageWebJar / artifact).value
-          artifactValue.withName(artifactValue.name + "-webjar")
-        },
-
         exportedProductJars := {
           val data = packageWebJar.value
           val attributed = Attributed.blank(data)
@@ -53,5 +48,10 @@ object WebJarPlugin extends AutoPlugin {
       )
     } ++ Seq(
       packageWebJar / mappings := Seq.empty,
+
+      packageWebJar / artifact := {
+        val artifactValue = (packageWebJar / artifact).value
+        artifactValue.withName(artifactValue.name + "-webjar")
+      }
     )
 }
