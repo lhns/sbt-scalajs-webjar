@@ -1,6 +1,6 @@
 package de.lolhens.scalajs.webjar
 
-import de.lolhens.scalajs.webjar.WebJarPlugin.autoImport._
+import de.lolhens.scalajs.webjar.WebJarPlugin2.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport._
 import sbt.Keys._
@@ -15,7 +15,7 @@ object ScalaJSWebJarPlugin extends AutoPlugin {
 
   import autoImport._
 
-  override def requires: Plugins = ScalaJSPlugin && WebJarPlugin
+  override def requires: Plugins = ScalaJSPlugin && WebJarPlugin2
 
   override lazy val projectSettings = Seq(
     scalaJSUseMainModuleInitializer := true,
