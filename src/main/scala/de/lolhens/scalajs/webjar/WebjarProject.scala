@@ -1,12 +1,36 @@
 package de.lolhens.scalajs.webjar
 
 import de.lolhens.scalajs.webjar.WebjarPlugin.autoImport._
+import sbt.Keys._
 import sbt._
 
 import scala.language.implicitConversions
 
 class WebjarProject(val self: Project) extends AnyVal {
-  def webjar: ClasspathDep[ProjectReference] = self % s"${Compile.name}->${Webjar.name}"
+  def webjar: ClasspathDep[ProjectReference] = {
+    Project(self.id + "-webjar", self.base.toPath.resolve(".webjar").toFile)
+      .settings(
+        name := (self / name).value + "-webjar",
+        version := (self / version).value,
+
+        watchSources := (self / watchSources).value,
+
+        exportJars := true,
+
+        Compile / packageBin / mappings := {
+          def m = (project / webjarMappings).value
+
+          def n = (project / name).value
+
+          def v = (project / version).value
+
+          m.map {
+            case (file, mapping) =>
+              file -> s"META-INF/resources/webjars/$n/$v/$mapping"
+          }
+        }
+      )
+  }
 }
 
 object WebjarProject {

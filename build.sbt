@@ -1,7 +1,7 @@
 inThisBuild(Seq(
   name := "sbt-scalajs-webjar",
   organization := "de.lolhens",
-  version := "0.0.12",
+  version := "0.0.13",
 ))
 
 name := (ThisBuild / name).value
