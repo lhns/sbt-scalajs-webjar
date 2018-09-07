@@ -18,11 +18,11 @@ class WebjarProject(val self: Project) extends AnyVal {
         exportJars := true,
 
         Compile / packageBin / mappings := {
-          def m = (project / webjarMappings).value
+          def m = (self / webjarMappings).value
 
-          def n = (project / name).value
+          def n = (self / name).value
 
-          def v = (project / version).value
+          def v = (self / version).value
 
           m.map {
             case (file, mapping) =>
