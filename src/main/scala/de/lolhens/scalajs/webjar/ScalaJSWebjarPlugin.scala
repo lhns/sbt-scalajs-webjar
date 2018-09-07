@@ -51,7 +51,7 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
         fullOptJS / scalaJS
     }.value,
 
-    packageWebjar / mappings := scalaJS.value.map { file =>
+    Webjar / mappings := scalaJS.value.map { file =>
       file -> s"js/${file.name}"
     }
   )

@@ -1,6 +1,6 @@
 package de.lolhens.scalajs.webjar
 
-import sbt.Defaults.ConfigZero
+import sbt.Defaults.TaskZero
 import sbt.Keys._
 import sbt._
 
@@ -10,7 +10,7 @@ object WebjarPlugin extends AutoPlugin {
 
   object autoImport {
     lazy val Webjar = config("webjar") extend Compile
-    lazy val packageWebjar = taskKey[File]("Produces a WebJar.")
+    //lazy val packageWebjar = taskKey[File]("Produces a WebJar.")
 
     implicit def webjarProject(project: Project): WebjarProject = WebjarProject.webjarProject(project)
   }
@@ -23,8 +23,8 @@ object WebjarPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Def.Setting[_]] =
     inConfig(Webjar) {
-      Defaults.packageTaskSettings(packageWebjar, Def.task {
-        def webjarMappings = (ConfigZero / packageWebjar / mappings).value
+      Defaults.packageTaskSettings(packageBin, Def.task {
+        def webjarMappings = (TaskZero / mappings).value
 
         def artifactName = name.value
 
@@ -38,22 +38,22 @@ object WebjarPlugin extends AutoPlugin {
         exportJars := true,
 
         exportedProductJars := {
-          val data = packageWebjar.value
+          val data = packageBin.value
           val attributed = Attributed.blank(data)
-            .put(artifact.key, (packageWebjar / artifact).value)
+            .put(artifact.key, (packageBin / artifact).value)
             .put(configuration.key, Webjar)
 
           Seq(attributed)
         },
 
-        dependencyClasspathAsJars := Seq.empty,
-        dependencyClasspath := Seq.empty,
-        externalDependencyClasspath := Seq.empty,
+        //dependencyClasspathAsJars := Seq.empty,
+        //dependencyClasspath := Seq.empty,
+        //externalDependencyClasspath := Seq.empty,
 
-        fullClasspathAsJars := exportedProductJars.value,
-        fullClasspath := fullClasspathAsJars.value
+        //fullClasspathAsJars := exportedProductJars.value,
+        //fullClasspath := fullClasspathAsJars.value,
+
+        mappings := Seq.empty
       )
-    } ++ Seq(
-      packageWebjar / mappings := Seq.empty
-    )
+    }
 }
