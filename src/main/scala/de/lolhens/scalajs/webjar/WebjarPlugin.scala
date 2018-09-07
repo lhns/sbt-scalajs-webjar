@@ -1,6 +1,5 @@
 package de.lolhens.scalajs.webjar
 
-import sbt.Keys._
 import sbt._
 
 import scala.language.implicitConversions
@@ -15,7 +14,14 @@ object WebjarPlugin extends AutoPlugin {
 
   import autoImport._
 
+  override def derivedProjects(proj: ProjectDefinition[_]): Seq[Project] = proj match {
+    case project: Project =>
+      Seq(project.webjar)
+
+    case _ => Seq.empty
+  }
+
   override lazy val projectSettings: Seq[Def.Setting[_]] = Seq(
-    webjarMappings := (resources / mappings).value
+    webjarMappings := Seq.empty
   )
 }
