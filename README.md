@@ -2,7 +2,7 @@
 
 Allows you to build a WebJar from a ScalaJS project.
 
-###Example
+### Example
 ```scala
 lazy val shared = crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure).in(file("shared"))
 
