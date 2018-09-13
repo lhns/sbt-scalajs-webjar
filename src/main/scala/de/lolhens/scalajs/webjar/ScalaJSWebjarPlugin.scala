@@ -52,7 +52,7 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
     }.value,
 
     webjarMappings ++= scalaJS.value.map { file =>
-      file -> s"js/${file.name}"
+      file -> file.name
     }
   )
 }
