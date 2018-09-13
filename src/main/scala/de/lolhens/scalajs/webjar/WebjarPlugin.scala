@@ -6,10 +6,8 @@ import scala.language.implicitConversions
 
 object WebjarPlugin extends AutoPlugin {
 
-  object autoImport {
+  object autoImport extends WebjarProjectOps {
     lazy val webjarMappings = taskKey[Seq[(File, String)]]("Defines the mappings from a file to a path, used by packaging the WebJar.")
-
-    implicit def webjarProject(project: Project): WebjarProject = WebjarProject.webjarProject(project)
   }
 
   import autoImport._

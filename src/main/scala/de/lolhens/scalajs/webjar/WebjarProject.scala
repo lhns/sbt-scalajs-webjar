@@ -33,6 +33,6 @@ class WebjarProject(val self: Project) extends AnyVal {
   }
 }
 
-object WebjarProject {
+trait WebjarProjectOps {
   implicit def webjarProject(project: Project): WebjarProject = new WebjarProject(project)
 }
