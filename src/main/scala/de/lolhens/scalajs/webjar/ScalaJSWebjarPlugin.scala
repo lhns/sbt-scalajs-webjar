@@ -13,7 +13,6 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
     scalaJSUseMainModuleInitializer := true,
 
     skip in packageJSDependencies := false,
-    Compile / packageJSDependencies / crossTarget := (Compile / resourceManaged).value,
 
     webjarMappings ++= Seq(
       (Compile / fullOptJS).value.data,

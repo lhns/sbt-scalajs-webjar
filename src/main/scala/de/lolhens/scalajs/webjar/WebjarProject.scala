@@ -15,9 +15,9 @@ class WebjarProject(val self: Project) extends AnyVal {
 
         watchSources := (self / watchSources).value,
 
-        exportJars := true,
+        //exportJars := true,
 
-        Compile / packageBin / mappings := {
+        /*Compile / packageBin / mappings := {
           def m = (self / webjarMappings).value
 
           def n = (self / name).value
@@ -26,8 +26,19 @@ class WebjarProject(val self: Project) extends AnyVal {
 
           m.map {
             case (file, mapping) =>
-              file -> s"META-INF/resources/webjars/$n/$v/$mapping"
+              file -> s"${webjarPath(n, v)}/$mapping"
           }
+        }*/
+
+        self / Compile / crossTarget := {
+          //(Compile / fullOptJS / crossTarget).value
+          (Compile / classDirectory).value.toPath
+            .resolve(webjarPath((self / name).value, (self / version).value)).toFile
+        },
+
+        Compile / compile := {
+          (self / webjarMappings).value
+          (Compile / compile).value
         }
       )
   }
@@ -35,4 +46,7 @@ class WebjarProject(val self: Project) extends AnyVal {
 
 trait WebjarProjectOps {
   implicit def webjarProject(project: Project): WebjarProject = new WebjarProject(project)
+
+  def webjarPath(library: String, version: String): String =
+    s"META-INF/resources/webjars/$library/$version"
 }
