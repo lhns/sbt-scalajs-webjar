@@ -1,7 +1,7 @@
 inThisBuild(Seq(
   name := "sbt-scalajs-webjar",
   organization := "de.lolhens",
-  version := "0.0.21-SNAPSHOT",
+  version := "0.1.0",
 
   resolvers += Resolver.bintrayRepo("lolhens", "sbt-plugins"),
   bintrayRepository := "sbt-plugins",
