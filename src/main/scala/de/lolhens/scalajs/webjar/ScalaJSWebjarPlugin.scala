@@ -14,12 +14,17 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
 
     skip in packageJSDependencies := false,
 
-    webjarMappings ++= Seq(
+    Compile / fullOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
+    Compile / fastOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
+    Compile / packageJSDependencies / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
+    Compile / packageMinifiedJSDependencies / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
+
+    Compile / webjarArtifacts := Seq(
       (Compile / fullOptJS).value.data,
       (Compile / fullOptJS).value.map(file => new File(file.toString + ".map")).data,
       (Compile / packageMinifiedJSDependencies).value
-    ).map { file =>
-      file -> file.name
-    }
+    ),
+
+    webjarMappings ++= (Compile / webjarArtifacts).value.map(file => file -> file.name)
   )
 }

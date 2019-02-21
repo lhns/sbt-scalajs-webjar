@@ -30,16 +30,12 @@ class WebjarProject(val self: Project) extends AnyVal {
           }
         }*/
 
-        self / Compile / crossTarget := {
-          //(Compile / fullOptJS / crossTarget).value
-          (Compile / classDirectory).value.toPath
-            .resolve(webjarPath((self / name).value, (self / version).value)).toFile
+        self / Compile / webjarArtifacts / crossTarget := {
+          (Compile / classDirectory).value
+            .toPath.resolve(webjarPath((self / name).value, (self / version).value)).toFile
         },
 
-        Compile / compile := {
-          (self / webjarMappings).value
-          (Compile / compile).value
-        }
+        Compile / compile := (Compile / compile).dependsOn(self / Compile / webjarArtifacts).value
       )
   }
 }

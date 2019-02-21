@@ -7,7 +7,7 @@ import scala.language.implicitConversions
 object WebjarPlugin extends AutoPlugin {
 
   object autoImport extends WebjarProjectOps {
-    lazy val webjar = taskKey[Unit]("")
+    lazy val webjarArtifacts = taskKey[Seq[File]]("WebJar artifacts.")
 
     lazy val webjarMappings = taskKey[Seq[(File, String)]]("Defines the mappings from a file to a path, used by packaging the WebJar.")
   }
