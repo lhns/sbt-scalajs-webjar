@@ -1,17 +1,14 @@
-inThisBuild(Seq(
-  name := "sbt-scalajs-webjar",
-  organization := "de.lolhens",
-  version := "0.1.0",
+organization := "de.lolhens"
+name := "sbt-scalajs-webjar"
+version := "0.1.1-SNAPSHOT"
 
-  resolvers += Resolver.bintrayRepo("lolhens", "sbt-plugins"),
-  bintrayRepository := "sbt-plugins",
-  bintrayReleaseOnPublish := false
-))
+enablePlugins(SbtPlugin)
 
-name := (ThisBuild / name).value
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.0.1")
 
-lazy val root = (project in file("."))
-  .enablePlugins(SbtPlugin)
-  .settings(
-    addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.26")
-  )
+scriptedLaunchOpts ++= Seq(
+  "-Xmx1024M",
+  "-Dplugin.version=" + version.value
+)
+
+scriptedBufferLog := false

@@ -1,5 +1,5 @@
-logLevel := Level.Warn
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.5.0")
 
-addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.4.0")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.2")
 
-addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.4")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.1")
