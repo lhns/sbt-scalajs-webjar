@@ -1,6 +1,6 @@
 # sbt-scalajs-webjar
 [![Release Notes](https://img.shields.io/github/release/LolHens/sbt-scalajs-webjar.svg?maxAge=3600)](https://github.com/LolHens/sbt-scalajs-webjar/releases/latest)
-[![Maven Central](https://img.shields.io/maven-central/v/de.lolhens/sbt-scalajs-webjar_2.12)](https://search.maven.org/artifact/de.lolhens/sbt-scalajs-webjar_2.12)
+[![Maven Central](https://img.shields.io/maven-central/v/de.lolhens/sbt-scalajs-webjar_2.12_1.0)](https://search.maven.org/artifact/de.lolhens/sbt-scalajs-webjar_2.12_1.0)
 [![Apache License 2.0](https://img.shields.io/github/license/LolHens/sbt-scalajs-webjar.svg?maxAge=3600)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Allows you to build a WebJar from a ScalaJS project.
