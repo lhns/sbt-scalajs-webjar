@@ -20,6 +20,12 @@ lazy val backend = project
   .settings(
     name := "backend",
 
-    scalaVersion := "2.13.1"
+    scalaVersion := "2.13.1",
+
+    Compile / compile := {
+      println((frontend / Compile / webjarMainResource).value)
+
+      (Compile / compile).value
+    }
   )
   .dependsOn(frontend.webjar)

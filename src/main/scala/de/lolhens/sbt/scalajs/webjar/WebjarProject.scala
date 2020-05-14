@@ -1,7 +1,6 @@
 package de.lolhens.sbt.scalajs.webjar
 
 import de.lolhens.sbt.scalajs.webjar.WebjarPlugin.autoImport._
-import de.lolhens.sbt.scalajs.webjar.WebjarProject._
 import sbt.Keys._
 import sbt._
 
@@ -12,25 +11,22 @@ class WebjarProject(val self: Project) extends AnyVal {
     Project(self.id + "-webjar", self.base.toPath.resolve(".webjar").toFile)
       .settings(
         name := (self / name).value + "-webjar",
+        normalizedName := (self / normalizedName).value + "-webjar",
         version := (self / version).value,
 
         scalaVersion := (self / scalaVersion).value,
 
         watchSources := (self / watchSources).value,
 
+        self / Compile / webjarResourcePath := s"META-INF/resources/webjars/${(self / name).value}/${(self / version).value}",
+
         self / Compile / webjarArtifacts / crossTarget := {
-          (Compile / classDirectory).value
-            .toPath
-            .resolve(webjarPath((self / name).value, (self / version).value))
-            .toFile
+          (Compile / classDirectory).value.toPath.resolve((self / Compile / webjarResourcePath).value).toFile
         },
 
-        Compile / compile := (Compile / compile).dependsOn(self / Compile / webjarArtifacts).value
+        Compile / compile := (Compile / compile).dependsOn(self / Compile / webjarArtifacts).value,
+
+        exportJars := true,
       )
   }
-}
-
-object WebjarProject {
-  def webjarPath(library: String, version: String): String =
-    s"META-INF/resources/webjars/$library/$version"
 }
