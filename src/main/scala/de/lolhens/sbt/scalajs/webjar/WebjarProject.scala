@@ -25,8 +25,6 @@ class WebjarProject(val self: Project) extends AnyVal {
         },
 
         Compile / compile := (Compile / compile).dependsOn(self / Compile / webjarArtifacts).value,
-
-        exportJars := true,
       )
   }
 }
