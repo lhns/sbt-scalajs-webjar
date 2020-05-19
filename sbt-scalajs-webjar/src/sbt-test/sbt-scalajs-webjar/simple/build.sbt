@@ -5,7 +5,6 @@ lazy val root = project.in(file(".")).settings(
 
 lazy val frontend = project
   .enablePlugins(
-    ScalaJSPlugin,
     ScalaJSWebjarPlugin
   )
   .settings(

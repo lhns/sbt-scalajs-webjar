@@ -1,0 +1,4 @@
+> package
+$ exists frontend/.webjar/target/scala-2.13/classes/META-INF/resources/webjars/frontend/0.1.0-SNAPSHOT/frontend-fastopt-bundle.js
+$ exists frontend/.webjar/target/scala-2.13/classes/META-INF/resources/webjars/frontend/0.1.0-SNAPSHOT/frontend-fastopt-bundle.js.map
+$ exists frontend/.webjar/target/scala-2.13/frontend-webjar_2.13-0.1.0-SNAPSHOT.jar
