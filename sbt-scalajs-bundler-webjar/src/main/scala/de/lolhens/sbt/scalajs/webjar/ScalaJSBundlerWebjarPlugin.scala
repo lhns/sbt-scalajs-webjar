@@ -13,7 +13,7 @@ object ScalaJSBundlerWebjarPlugin extends AutoPlugin {
   override lazy val projectSettings = Seq(
     Compile / npmUpdate / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
 
-    Compile / webjarMainResourceName := scalaJSLinkedFileTask(Compile / _ / artifactPath).value.name.stripSuffix(".js"),
+    Compile / webjarMainResourceName := scalaJSLinkedFileTask(Compile / _ / artifactPath).value.name.stripSuffix(".js") + "-bundle.js",
 
     Compile / webjarArtifacts := {
       val attributedFiles = scalaJSLinkedFileTask(Compile / _ / webpack).value
