@@ -47,9 +47,9 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
 )
 
 lazy val root = project.in(file("."))
+  .settings(commonSettings)
   .settings(
-    publish / skip := true,
-    packagedArtifacts := Map.empty
+    publish / skip := true
   )
   .aggregate(
     `sbt-scalajs-webjar`,
