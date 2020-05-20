@@ -14,6 +14,11 @@ lazy val frontend = project
 
     scalaJSUseMainModuleInitializer := true,
 
+    Compile / npmDependencies ++= Seq(
+      "react" -> "16.13.1",
+      "react-dom" -> "16.13.1"
+    ),
+
     Compile / fastOptJS / webpack := {
       val v = (Compile / fastOptJS / webpack).value
       println(v.seq.map(_.metadata.entries.toList).mkString("\n"))

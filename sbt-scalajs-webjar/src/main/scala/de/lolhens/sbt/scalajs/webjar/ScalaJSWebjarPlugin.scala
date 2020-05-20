@@ -9,7 +9,7 @@ import sbt._
 object ScalaJSWebjarPlugin extends AutoPlugin {
   override def requires: Plugins = ScalaJSPlugin && WebjarPlugin
 
-  private[webjar] def scalaJSLinkedFileTask[A](f: TaskKey[Attributed[File]] => Def.Initialize[A]): Def.Initialize[A] =
+  private[webjar] def stagedOptJS[A](f: TaskKey[Attributed[File]] => Def.Initialize[A]): Def.Initialize[A] =
     Def.settingDyn {
       scalaJSStage.value match {
         case Stage.FastOpt => f(fastOptJS)
@@ -17,19 +17,19 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
       }
     }
 
-  override lazy val projectSettings = Seq(
-    Compile / fastOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
-    Compile / fullOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
+  override lazy val projectSettings: Seq[Setting[_]] =
+    List(fastOptJS, fullOptJS).map { stagedOptJS =>
+      Compile / stagedOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value
+    } ++ Seq(
+      Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name,
 
-    Compile / webjarMainResourceName := scalaJSLinkedFileTask(Compile / _ / artifactPath).value.name,
+      Compile / webjarArtifacts := {
+        val attributedFile = (Compile / scalaJSLinkedFile).value
 
-    Compile / webjarArtifacts := {
-      val attributedFile = (Compile / scalaJSLinkedFile).value
-
-      Seq(
-        attributedFile.data,
-        attributedFile.metadata(scalaJSSourceMap),
-      )
-    }
-  )
+        Seq(
+          attributedFile.data,
+          attributedFile.metadata(scalaJSSourceMap),
+        )
+      }
+    )
 }
