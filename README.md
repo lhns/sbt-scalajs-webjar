@@ -7,7 +7,7 @@ Allows you to build a WebJar from a ScalaJS project.
 
 ### plugins.sbt
 ```sbt
-addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.1.1")
+addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.3.3")
 ```
 
 Example
