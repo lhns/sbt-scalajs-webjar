@@ -12,17 +12,22 @@ object ScalaJSBundlerWebjarPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Setting[_]] =
     Seq(
-      Compile / npmUpdate / crossTarget := (Compile / webjarArtifacts / crossTarget).value,
-
       Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name.stripSuffix(".js") + "-bundle.js",
 
       Compile / webjarArtifacts := {
         val attributedFiles = stagedOptJS(Compile / _ / webpack).value
+        val target = (Compile / webjarArtifacts / crossTarget).value
 
-        Seq(
+        val artifacts = Seq(
           attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.ApplicationBundle)).map(_.data),
           attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.Asset)).map(_.data),
-        ).flatMap(_.toList)
+        )
+          .flatMap(_.toList)
+          .map(file => (file, target / file.name))
+
+        IO.copy(artifacts)
+
+        artifacts.map(_._2)
       }
     )
 }
