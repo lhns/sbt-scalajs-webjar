@@ -18,7 +18,7 @@ class WebjarProject(val self: Project) extends AnyVal {
 
         watchSources := (self / watchSources).value,
 
-        self / Compile / webjarResourcePath := s"META-INF/resources/webjars/${(self / name).value}/${(self / version).value}",
+        self / Compile / webjarResourcePath := s"META-INF/resources/webjars/${(self / normalizedName).value}/${(self / version).value}",
 
         self / Compile / webjarMainResource := (self / Compile / webjarResourcePath).value + "/" + (self / Compile / webjarMainResourceName).value,
 
