@@ -1,4 +1,5 @@
 # sbt-scalajs-webjar
+[![Test Workflow](https://github.com/LolHens/sbt-scalajs-webjar/workflows/test/badge.svg)](https://github.com/LolHens/sbt-scalajs-webjar/actions?query=workflow%3Atest)
 [![Release Notes](https://img.shields.io/github/release/LolHens/sbt-scalajs-webjar.svg?maxAge=3600)](https://github.com/LolHens/sbt-scalajs-webjar/releases/latest)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.lolhens/sbt-scalajs-webjar/badge.svg)](https://search.maven.org/artifact/de.lolhens/sbt-scalajs-webjar)
 [![Apache License 2.0](https://img.shields.io/github/license/LolHens/sbt-scalajs-webjar.svg?maxAge=3600)](https://www.apache.org/licenses/LICENSE-2.0)
