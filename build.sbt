@@ -72,5 +72,5 @@ lazy val `sbt-scalajs-bundler-webjar` = project
   .settings(
     name := "sbt-scalajs-bundler-webjar",
 
-    addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.18.0")
+    addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.19.0")
   )
