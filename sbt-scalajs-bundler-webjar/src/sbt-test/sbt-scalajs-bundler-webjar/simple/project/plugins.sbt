@@ -7,4 +7,4 @@ sys.props.get("plugin.version") match {
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.0.1")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.19.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.20.0")
