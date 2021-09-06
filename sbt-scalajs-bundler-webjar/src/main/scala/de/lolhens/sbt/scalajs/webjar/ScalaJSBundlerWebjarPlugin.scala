@@ -10,24 +10,25 @@ import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport._
 object ScalaJSBundlerWebjarPlugin extends AutoPlugin {
   override def requires: Plugins = ScalaJSBundlerPlugin && WebjarPlugin
 
-  override lazy val projectSettings: Seq[Setting[_]] =
-    Seq(
-      Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name.stripSuffix(".js") + "-bundle.js",
+  override lazy val projectSettings: Seq[Setting[_]] = Seq(
+    Compile / webjarAssetReferenceType := Some("tuple"),
 
-      Compile / webjarArtifacts := {
-        val attributedFiles = stagedOptJS(Compile / _ / webpack).value
-        val target = (Compile / webjarArtifacts / crossTarget).value
+    Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name.stripSuffix(".js") + "-bundle.js",
 
-        val artifacts = Seq(
-          attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.ApplicationBundle)).map(_.data),
-          attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.Asset)).map(_.data),
-        )
-          .flatMap(_.toList)
-          .map(file => (file, target / file.name))
+    Compile / webjarArtifacts := {
+      val attributedFiles = stagedOptJS(Compile / _ / webpack).value
+      val target = (Compile / webjarArtifacts / crossTarget).value
 
-        IO.copy(artifacts)
+      val artifacts = Seq(
+        attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.ApplicationBundle)).map(_.data),
+        attributedFiles.find(_.metadata.get(BundlerFileTypeAttr).exists(_ == BundlerFileType.Asset)).map(_.data),
+      )
+        .flatMap(_.toList)
+        .map(file => (file, target / file.name))
 
-        artifacts.map(_._2)
-      }
-    )
+      IO.copy(artifacts)
+
+      artifacts.map(_._2)
+    }
+  )
 }

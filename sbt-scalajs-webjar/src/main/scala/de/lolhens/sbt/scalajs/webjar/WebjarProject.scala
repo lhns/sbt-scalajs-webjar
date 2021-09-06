@@ -4,34 +4,72 @@ import de.lolhens.sbt.scalajs.webjar.WebjarPlugin.autoImport._
 import sbt.Keys._
 import sbt._
 
+import java.nio.charset.StandardCharsets
 import scala.language.implicitConversions
 
-class WebjarProject(val self: Project) extends AnyVal {
+class WebjarProject(val parent: Project) extends AnyVal {
   def webjar: Project = {
-    Project(self.id + "-webjar", self.base.toPath.resolve(".webjar").toFile)
+    Project(parent.id + "-webjar", parent.base.toPath.resolve(".webjar").toFile)
       .settings(
-        name := (self / name).value + "-webjar",
-        normalizedName := (self / normalizedName).value + "-webjar",
-        version := (self / version).value,
+        name := (parent / name).value + "-webjar",
+        normalizedName := (parent / normalizedName).value + "-webjar",
+        version := (parent / version).value,
 
-        scalaVersion := (self / scalaVersion).value,
+        scalaVersion := (parent / scalaVersion).value,
 
-        watchSources := (self / watchSources).value,
+        watchSources := (parent / watchSources).value,
 
-        self / Compile / webjarResourcePath := s"META-INF/resources/webjars/${(self / normalizedName).value}/${(self / version).value}",
+        parent / Compile / webjarResourcePath := s"META-INF/resources/webjars/${(parent / normalizedName).value}/${(parent / version).value}",
 
-        self / Compile / webjarMainResource := (self / Compile / webjarResourcePath).value + "/" + (self / Compile / webjarMainResourceName).value,
+        parent / Compile / webjarMainResource := (parent / Compile / webjarResourcePath).value + "/" + (parent / Compile / webjarMainResourceName).value,
 
-        self / Compile / webjarArtifacts / crossTarget := {
-          (Compile / classDirectory).value.toPath.resolve((self / Compile / webjarResourcePath).value).toFile
+        parent / Compile / webjarArtifacts / crossTarget := {
+          (Compile / classDirectory).value.toPath.resolve((parent / Compile / webjarResourcePath).value).toFile
         },
 
-        Compile / compile := (Compile / compile).dependsOn(self / Compile / webjarArtifacts).value,
+        Compile / compile := (Compile / compile).dependsOn(parent / Compile / webjarArtifacts).value,
 
         Compile / packageBin / mappings := {
-          val artifacts = (self / Compile / webjarArtifacts).value
-          (Compile / packageBin / mappings).value.filter(mapping => artifacts.contains(mapping._1))
-        }
+          val artifacts = (parent / Compile / webjarArtifacts).value
+          (Compile / packageBin / mappings).value.filter(mapping =>
+            mapping._2.endsWith(".class") || artifacts.contains(mapping._1)
+          )
+        },
+
+        Compile / sourceGenerators += Def.taskDyn {
+          (parent / Compile / webjarAssetReferenceType).value.fold {
+            Def.task(Seq.empty[File])
+          } { referenceType =>
+            Def.task {
+              val file = (Compile / sourceManaged).value / "WebjarReference.scala"
+              val webjarLibrary = (parent / normalizedName).value
+              val webjarReference = makeWebjarReference(
+                referenceType,
+                library = webjarLibrary,
+                version = (parent / version).value,
+                asset = (parent / Compile / webjarMainResourceName).value
+              )
+              val string =
+                s"""package webjars
+                   |object `$webjarLibrary` {
+                   |  val webjarAsset = $webjarReference
+                   |}""".stripMargin
+              IO.write(file, string, StandardCharsets.UTF_8)
+              Seq(file)
+            }
+          }
+        }.taskValue,
       )
+  }
+
+  private def makeWebjarReference(
+                                   referenceType: String,
+                                   library: String,
+                                   version: String,
+                                   asset: String
+                                 ): String = referenceType.toLowerCase match {
+    case "tuple" => s"""("$library", "$version", "$asset")"""
+    case "http4s" => s"""org.http4s.server.staticcontent.WebjarService.WebjarAsset("$library", "$version", "$asset")"""
+    case _ => throw new IllegalArgumentException(s"Unsupported webjar asset reference type: $referenceType")
   }
 }

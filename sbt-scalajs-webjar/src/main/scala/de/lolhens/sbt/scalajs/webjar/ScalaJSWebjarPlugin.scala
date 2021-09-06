@@ -18,9 +18,11 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
     }
 
   override lazy val projectSettings: Seq[Setting[_]] =
-    List(fastOptJS, fullOptJS).map { stagedOptJS =>
+    Seq(fastOptJS, fullOptJS).map { stagedOptJS =>
       Compile / stagedOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value
     } ++ Seq(
+      Compile / webjarAssetReferenceType := Some("tuple"),
+
       Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name,
 
       Compile / webjarArtifacts := {
@@ -30,6 +32,6 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
           attributedFile.data,
           attributedFile.metadata(scalaJSSourceMap),
         )
-      }
+      },
     )
 }

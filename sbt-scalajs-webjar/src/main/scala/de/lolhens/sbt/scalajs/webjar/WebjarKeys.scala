@@ -13,5 +13,7 @@ class WebjarKeys {
 
   lazy val webjarMainResource = settingKey[String]("Resource path of the main webjar artifact.")
 
+  lazy val webjarAssetReferenceType = settingKey[Option[String]]("Generates a webjar reference using the specified type (tuple, http4s).")
+
   implicit def webjarProject(project: Project): WebjarProject = new WebjarProject(project)
 }
