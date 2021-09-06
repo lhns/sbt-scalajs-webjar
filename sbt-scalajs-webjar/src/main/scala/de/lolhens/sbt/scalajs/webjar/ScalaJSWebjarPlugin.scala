@@ -21,8 +21,6 @@ object ScalaJSWebjarPlugin extends AutoPlugin {
     Seq(fastOptJS, fullOptJS).map { stagedOptJS =>
       Compile / stagedOptJS / crossTarget := (Compile / webjarArtifacts / crossTarget).value
     } ++ Seq(
-      Compile / webjarAssetReferenceType := Some("tuple"),
-
       Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name,
 
       Compile / webjarArtifacts := {

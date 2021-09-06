@@ -11,8 +11,6 @@ object ScalaJSBundlerWebjarPlugin extends AutoPlugin {
   override def requires: Plugins = ScalaJSBundlerPlugin && WebjarPlugin
 
   override lazy val projectSettings: Seq[Setting[_]] = Seq(
-    Compile / webjarAssetReferenceType := Some("tuple"),
-
     Compile / webjarMainResourceName := stagedOptJS(Compile / _ / artifactPath).value.name.stripSuffix(".js") + "-bundle.js",
 
     Compile / webjarArtifacts := {

@@ -36,8 +36,10 @@ class WebjarProject(val parent: Project) extends AnyVal {
           )
         },
 
+        webjarAssetReferenceType := None,
+
         Compile / sourceGenerators += Def.taskDyn {
-          (parent / Compile / webjarAssetReferenceType).value.fold {
+          webjarAssetReferenceType.value.fold {
             Def.task(Seq.empty[File])
           } { referenceType =>
             Def.task {
@@ -49,12 +51,19 @@ class WebjarProject(val parent: Project) extends AnyVal {
                 version = (parent / version).value,
                 asset = (parent / Compile / webjarMainResourceName).value
               )
+
+              def quote(ident: String): String =
+                if (ident.matches("[a-zA-Z_][a-zA-Z0-9_]*")) ident
+                else s"`$ident`"
+
               val string =
                 s"""package webjars
-                   |object `$webjarLibrary` {
+                   |object ${quote(webjarLibrary)} {
                    |  val webjarAsset = $webjarReference
                    |}""".stripMargin
+
               IO.write(file, string, StandardCharsets.UTF_8)
+
               Seq(file)
             }
           }

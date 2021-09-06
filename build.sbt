@@ -1,6 +1,10 @@
 lazy val commonSettings: Seq[Setting[_]] = Seq(
   organization := "de.lolhens",
-  version := "0.3.3-SNAPSHOT",
+  version := {
+    val Tag = "refs/tags/(.*)".r
+    sys.env.get("CI_VERSION").collect { case Tag(tag) => tag }
+      .getOrElse("0.0.1-SNAPSHOT")
+  },
 
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0")),
 
@@ -25,11 +29,6 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
 
 
   Compile / doc / sources := Seq.empty,
-
-  version := {
-    val tagPrefix = "refs/tags/"
-    sys.env.get("CI_VERSION").filter(_.startsWith(tagPrefix)).map(_.drop(tagPrefix.length)).getOrElse(version.value)
-  },
 
   publishMavenStyle := true,
 
