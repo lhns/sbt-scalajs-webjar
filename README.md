@@ -9,26 +9,27 @@ Allows you to build [WebJars](https://www.webjars.org/) from [Scala.js](https://
 
 ### plugins.sbt
 ```sbt
-addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.3.5")
+addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.4.0")
 ```
 
 Example
 -------
+
 ```scala
 lazy val shared = crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure).in(file("shared"))
 
 lazy val sharedJs = shared.js
 lazy val sharedJvm = shared.jvm
 
-lazy val server = project.in(file("server"))
-  .dependsOn(sharedJvm)
-  .dependsOn(clientWebjar)
-
-lazy val client = project.in(file("client"))
+lazy val frontend = project.in(file("client"))
   .enablePlugins(ScalaJSWebjarPlugin)
   .dependsOn(sharedJs)
 
-lazy val clientWebjar = client.webjar
+lazy val frontendWebjar = frontend.webjar
+
+lazy val server = project.in(file("server"))
+  .dependsOn(sharedJvm)
+  .dependsOn(frontendWebjar)
 ```
 
 Licensing

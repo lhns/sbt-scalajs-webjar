@@ -1,7 +1,7 @@
 lazy val root = project.in(file(".")).settings(
   scalaVersion := "2.13.1"
 )
-  .aggregate(backend, frontend.webjar)
+  .aggregate(backend, frontendWebjar)
 
 lazy val frontend = project
   .enablePlugins(
@@ -26,6 +26,8 @@ lazy val frontend = project
     }
   )
 
+lazy val frontendWebjar = frontend.webjar
+
 lazy val backend = project
   .settings(
     name := "backend",
@@ -38,4 +40,4 @@ lazy val backend = project
       (Compile / compile).value
     }
   )
-  .dependsOn(frontend.webjar)
+  .dependsOn(frontendWebjar)
