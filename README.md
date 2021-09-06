@@ -9,7 +9,7 @@ Allows you to build [WebJars](https://www.webjars.org/) from [Scala.js](https://
 
 ### plugins.sbt
 ```sbt
-addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.3.3")
+addSbtPlugin("de.lolhens" % "sbt-scalajs-webjar" % "0.3.5")
 ```
 
 Example
@@ -22,11 +22,13 @@ lazy val sharedJvm = shared.jvm
 
 lazy val server = project.in(file("server"))
   .dependsOn(sharedJvm)
-  .dependsOn(client.webjar)
+  .dependsOn(clientWebjar)
 
 lazy val client = project.in(file("client"))
   .enablePlugins(ScalaJSWebjarPlugin)
   .dependsOn(sharedJs)
+
+lazy val clientWebjar = client.webjar
 ```
 
 Licensing
