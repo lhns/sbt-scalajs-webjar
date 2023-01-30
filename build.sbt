@@ -1,3 +1,8 @@
+val V = new {
+  val scalajs = "1.13.0"
+  val scalajsBundler = "0.21.1"
+}
+
 lazy val commonSettings: Seq[Setting[_]] = Seq(
   organization := "de.lolhens",
   version := {
@@ -61,7 +66,7 @@ lazy val `sbt-scalajs-webjar` = project
   .settings(
     name := "sbt-scalajs-webjar",
 
-    addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.12.0")
+    addSbtPlugin("org.scala-js" % "sbt-scalajs" % V.scalajs)
   )
 
 lazy val `sbt-scalajs-bundler-webjar` = project
@@ -71,5 +76,5 @@ lazy val `sbt-scalajs-bundler-webjar` = project
   .settings(
     name := "sbt-scalajs-bundler-webjar",
 
-    addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.21.1")
+    addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % V.scalajsBundler)
   )
