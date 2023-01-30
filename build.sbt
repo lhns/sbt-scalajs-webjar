@@ -61,7 +61,7 @@ lazy val `sbt-scalajs-webjar` = project
   .settings(
     name := "sbt-scalajs-webjar",
 
-    addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.12.0")
+    addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.13.0")
   )
 
 lazy val `sbt-scalajs-bundler-webjar` = project
