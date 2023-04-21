@@ -16,8 +16,8 @@ lazy val frontend = project
     scalaJSUseMainModuleInitializer := true,
 
     Compile / npmDependencies ++= Seq(
-      "react" -> "16.13.1",
-      "react-dom" -> "16.13.1"
+      "react" -> "18.2.0",
+      "react-dom" -> "18.2.0"
     ),
 
     Compile / fastOptJS / webpack := {
