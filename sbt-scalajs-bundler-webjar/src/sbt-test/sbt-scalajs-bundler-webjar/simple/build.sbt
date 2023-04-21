@@ -20,6 +20,8 @@ lazy val frontend = project
       "react-dom" -> "18.2.0"
     ),
 
+    webpack / version := "5.80.0",
+
     Compile / fastOptJS / webpack := {
       val v = (Compile / fastOptJS / webpack).value
       println(v.seq.map(_.metadata.entries.toList).mkString("\n"))
