@@ -1,6 +1,7 @@
-lazy val root = project.in(file(".")).settings(
-  scalaVersion := "2.13.1"
-)
+lazy val root = project.in(file("."))
+  .settings(
+    scalaVersion := "2.13.10"
+  )
   .aggregate(backend, frontendWebjar)
 
 lazy val frontend = project
@@ -10,7 +11,7 @@ lazy val frontend = project
   .settings(
     name := "frontend",
 
-    scalaVersion := "2.13.1",
+    scalaVersion := "2.13.10",
 
     scalaJSUseMainModuleInitializer := true,
 
@@ -32,7 +33,7 @@ lazy val backend = project
   .settings(
     name := "backend",
 
-    scalaVersion := "2.13.1",
+    scalaVersion := "2.13.10",
 
     Compile / compile := {
       println((frontend / Compile / webjarMainResource).value)
