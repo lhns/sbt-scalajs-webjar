@@ -1,12 +1,15 @@
+ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / organization := "de.lhns"
+name := (`sbt-scalajs-webjar` / name).value
+
 val V = new {
   val scalajs = "1.13.1"
   val scalajsBundler = "0.21.1"
 }
 
 lazy val commonSettings: Seq[Setting[_]] = Seq(
-  organization := "de.lolhens",
   version := {
-    val Tag = "refs/tags/(.*)".r
+    val Tag = "refs/tags/v?([0-9]+(?:\\.[0-9]+)+(?:[+-].*)?)".r
     sys.env.get("CI_VERSION").collect { case Tag(tag) => tag }
       .getOrElse("0.0.1-SNAPSHOT")
   },
@@ -33,24 +36,41 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
 
   Compile / doc / sources := Seq.empty,
 
-  publishMavenStyle := true,
-
   publishTo := sonatypePublishToBundle.value,
+
+  sonatypeCredentialHost := {
+    if (sonatypeProfileName.value == "de.lolhens")
+      "oss.sonatype.org"
+    else
+      "s01.oss.sonatype.org"
+  },
 
   credentials ++= (for {
     username <- sys.env.get("SONATYPE_USERNAME")
     password <- sys.env.get("SONATYPE_PASSWORD")
   } yield Credentials(
     "Sonatype Nexus Repository Manager",
-    "oss.sonatype.org",
+    sonatypeCredentialHost.value,
     username,
     password
-  )).toList
+  )).toList,
+
+  pomExtra := {
+    if (sonatypeProfileName.value == "de.lolhens")
+      <distributionManagement>
+        <relocation>
+          <groupId>de.lhns</groupId>
+        </relocation>
+      </distributionManagement>
+    else
+      pomExtra.value
+  }
 )
 
 lazy val root = project.in(file("."))
   .settings(commonSettings)
   .settings(
+    publishArtifact := false,
     publish / skip := true
   )
   .aggregate(

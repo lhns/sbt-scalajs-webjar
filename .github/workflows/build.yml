@@ -40,3 +40,5 @@ jobs:
           SBT_OPTS: '-Xmx2G'
         run: |
           sbt "; sonatypeBundleClean; publishSigned; sonatypeBundleRelease"
+          sed -i -e 's/organization := "de.lhns"/organization := "de.lolhens"/' build.sbt
+          sbt "; sonatypeBundleClean; publishSigned; sonatypeBundleRelease"
