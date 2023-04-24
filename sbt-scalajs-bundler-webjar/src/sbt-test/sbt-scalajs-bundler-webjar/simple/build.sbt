@@ -1,6 +1,7 @@
-lazy val root = project.in(file(".")).settings(
-  scalaVersion := "2.13.1"
-)
+lazy val root = project.in(file("."))
+  .settings(
+    scalaVersion := "2.13.10"
+  )
   .aggregate(backend, frontendWebjar)
 
 lazy val frontend = project
@@ -10,14 +11,16 @@ lazy val frontend = project
   .settings(
     name := "frontend",
 
-    scalaVersion := "2.13.1",
+    scalaVersion := "2.13.10",
 
     scalaJSUseMainModuleInitializer := true,
 
     Compile / npmDependencies ++= Seq(
-      "react" -> "16.13.1",
-      "react-dom" -> "16.13.1"
+      "react" -> "18.2.0",
+      "react-dom" -> "18.2.0"
     ),
+
+    webpack / version := "5.80.0",
 
     Compile / fastOptJS / webpack := {
       val v = (Compile / fastOptJS / webpack).value
@@ -32,7 +35,7 @@ lazy val backend = project
   .settings(
     name := "backend",
 
-    scalaVersion := "2.13.1",
+    scalaVersion := "2.13.10",
 
     Compile / compile := {
       println((frontend / Compile / webjarMainResource).value)
